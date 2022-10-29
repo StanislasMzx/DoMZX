@@ -1,0 +1,20 @@
+from flask import Flask, send_from_directory
+from flask_restful import Api, Resource, reqparse
+from flask_cors import CORS  # comment this on deployment
+from api.DomzxApi import DomzxApi
+
+app = Flask(__name__, static_url_path='', static_folder='frontend/dist')
+CORS(app)  # comment this on deployment
+api = Api(app)
+
+
+@app.route("/", defaults={'path': ''})
+def serve(path):
+    return send_from_directory(app.static_folder, 'index.html')
+
+
+api.add_resource(DomzxApi, '/flask/hello')
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080, debug=True)
