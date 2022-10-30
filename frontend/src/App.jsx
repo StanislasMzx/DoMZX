@@ -8,7 +8,10 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/flask/hello")
+      .post("http://localhost:8080/api/login", {
+        username: "test",
+        password: "test",
+      })
       .then((response) => {
         console.log("SUCCESS", response);
         setGetMessage(response);
@@ -24,7 +27,7 @@ function App() {
         <p>React + Flask Tutorial</p>
         <div>
           {getMessage.status === 200 ? (
-            <h3>{getMessage.data.message}</h3>
+            <h3>{getMessage.data.access_token}</h3>
           ) : (
             <h3>LOADING</h3>
           )}

@@ -1,36 +1,67 @@
-from flask_restful import Api, Resource, reqparse
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import create_access_token
+from flask import g
+from flask_restful import Resource, reqparse
+from werkzeug.security import generate_password_hash, check_password_hash
+
+import sqlite3
+
+DATABASE = 'domzx.db'
 
 
-class DomzxApi(Resource):
-    def get(self):
-        return {
-            'resultStatus': 'SUCCESS',
-            'message': "Hello Domzx Api"
-        }
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+    return db
 
+
+def request_db(request, args=[]):
+    """
+    Retourne les tuples correspondants à la requête request avec les arguments éventuels args
+    """
+    c = get_db().cursor()
+    c.execute(request, args)
+    return c.fetchall()
+
+
+def update_db(request, args=[]):
+    """
+    Modifie la BD avec la requête request avec les arguments éventuels args
+    """
+    c = get_db().cursor()
+    c.execute(request, args)
+    get_db().commit()
+
+
+class Login(Resource):
     def post(self):
-        print(self)
         parser = reqparse.RequestParser()
-        parser.add_argument('type', type=str)
-        parser.add_argument('message', type=str)
+        parser.add_argument('username', type=str)
+        parser.add_argument('password', type=str)
 
         args = parser.parse_args()
 
-        print(args)
-        # note, the post req from frontend needs to match the strings here (e.g. 'type and 'message')
+        request_username = args['username']
+        request_password = args['password']
 
-        request_type = args['type']
-        request_json = args['message']
-        # ret_status, ret_msg = ReturnData(request_type, request_json)
-        # currently just returning the req straight
-        ret_status = request_type
-        ret_msg = request_json
+        user = request_db(
+            'select * from users where username = ?', [request_username])
+        if user == []:
+            return {"msg": "Bad username"}, 401
 
-        if ret_msg:
-            message = "Your Message Requested: {}".format(ret_msg)
-        else:
-            message = "No Msg"
+        password = check_password_hash(user[0][1], request_password)
+        if not (password):
+            return {"msg": "Bad password"}, 401
 
-        final_ret = {"status": "Success", "message": message}
+        access_token = create_access_token(identity=request_username)
+        return {"access_token": access_token}
 
-        return final_ret
+
+class Protected(Resource):
+    decorators = [jwt_required()]
+
+    def post(self):
+        current_user = get_jwt_identity()
+        return {"logged_in_as": current_user}, 200
