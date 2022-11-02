@@ -1,1 +1,1 @@
-CREATE TABLE Users (username VARCHAR PRIMARY KEY, password VARCHAR NOT NULL, rights VARCHAR CHECK(rights IN ('admin', 'perm', 'temp')), expiration DATE NOT NULL, last_connection DATE);
+CREATE TABLE Users (username VARCHAR PRIMARY KEY, password VARCHAR NOT NULL, rights VARCHAR CHECK(rights IN ('admin', 'perm', 'temp')) NOT NULL, expiration DATE, imageUrl VARCHAR NOT NULL);

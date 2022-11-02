@@ -1,39 +1,26 @@
-import logo from "./styles/logo.svg";
-import "./styles/App.css";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Index from "./pages/Index";
+import Page404 from "./pages/Page404";
+import Login from "./pages/Login";
+import PageTimer from "./pages/PageTimer";
+import PageLogs from "./pages/PageLogs";
+import PrivateRoutes from "./utils/PrivateRoutes";
+import Logout from "./utils/Logout";
 
 function App() {
-  const [getMessage, setGetMessage] = useState({});
-
-  useEffect(() => {
-    axios
-      .post("http://localhost:8080/api/login", {
-        username: "test",
-        password: "test",
-      })
-      .then((response) => {
-        console.log("SUCCESS", response);
-        setGetMessage(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>React + Flask Tutorial</p>
-        <div>
-          {getMessage.status === 200 ? (
-            <h3>{getMessage.data.access_token}</h3>
-          ) : (
-            <h3>LOADING</h3>
-          )}
-        </div>
-      </header>
-    </div>
+    <>
+      <Routes>
+        <Route element={<PrivateRoutes />}>
+          <Route index element={<Index />} />
+          <Route path="/timer" element={<PageTimer />} />
+          <Route path="/logs" element={<PageLogs />} />
+          <Route path="/logout" element={<Logout />} />
+        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Page404 />} />
+      </Routes>
+    </>
   );
 }
 
