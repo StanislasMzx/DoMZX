@@ -1,1 +1,3 @@
 CREATE TABLE Users (username VARCHAR PRIMARY KEY, password VARCHAR NOT NULL, rights VARCHAR CHECK(rights IN ('admin', 'perm', 'temp')) NOT NULL, expiration DATE, imageUrl VARCHAR NOT NULL);
+CREATE TABLE Wiring (equipmentId integer primary key autoincrement, equipmentName varchar not null, pin integer not null, pairId integer);
+CREATE TABLE sqlite_sequence(name,seq);

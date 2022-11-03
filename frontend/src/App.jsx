@@ -4,8 +4,8 @@ import Page404 from "./pages/Page404";
 import Login from "./pages/Login";
 import PageTimer from "./pages/PageTimer";
 import PageLogs from "./pages/PageLogs";
+import Settings from "./pages/Settings";
 import PrivateRoutes from "./utils/PrivateRoutes";
-import Logout from "./utils/Logout";
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
           <Route index element={<Index />} />
           <Route path="/timer" element={<PageTimer />} />
           <Route path="/logs" element={<PageLogs />} />
-          <Route path="/logout" element={<Logout />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<Page404 />} />

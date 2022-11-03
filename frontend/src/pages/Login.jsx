@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import { useState } from "react";
 import { ExclamationCircleIcon } from "@heroicons/react/outline";
 import axios from "axios";
-axios.defaults.baseURL = `http://localhost:8080`;
 
 import Notification from "../components/Notification";
 
