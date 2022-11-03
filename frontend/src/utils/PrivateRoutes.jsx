@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import axios from "axios";
-axios.defaults.baseURL = `http://localhost:8080`;
 
 function PrivateRoutes() {
   const [isLoading, setIsLoading] = useState(true);
@@ -10,12 +9,11 @@ function PrivateRoutes() {
   useEffect(() => {
     const checkLogin = async () => {
       try {
-        const response = await axios.get("/api/auth", {
-          withCredentials: true,
-        });
+        const response = await axios.post("/api/auth");
         setIsLoggedIn(response.data.logged_in);
       } catch (err) {
         setIsLoggedIn(false);
+        console.error(err.response);
       }
       setIsLoading(false);
     };
@@ -23,7 +21,7 @@ function PrivateRoutes() {
   }, [setIsLoading, setIsLoggedIn]);
 
   if (isLoading) {
-    return <>Checking auth status..</>;
+    return <></>;
   }
 
   if (!isLoggedIn) {

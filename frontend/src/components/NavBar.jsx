@@ -2,39 +2,57 @@ import { useState, useEffect, Fragment } from "react";
 import { NavLink } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon, HomeIcon } from "@heroicons/react/outline";
+import { useNavigate } from "react-router-dom";
+import Profile from "./Profile";
 import axios from "axios";
-axios.defaults.baseURL = `http://localhost:8080`;
 
-export default function NavBar({ currentPage }) {
-  const [user, setUser] = useState(null);
+export default function NavBar() {
+  const [user, setUser] = useState({});
+  const [openProfileSettings, setOpenProfileSettings] = useState(false);
+
   useEffect(() => {
     axios
-      .get("/api/whoami", { withCredentials: true })
+      .post("/api/whoami")
       .then((response) => {
         setUser(response.data);
       })
       .catch((err) => {
-        console.error(err);
+        setUser(err.response.data);
       });
   }, [setUser]);
 
+  const nav = useNavigate();
   const navigation = [
     { name: "Dashboard", href: "/" },
     { name: "Timer", href: "/timer" },
     { name: "Logs", href: "/logs" },
   ];
   const userNavigation = [
-    { name: "Your Profile", href: "/" },
-    { name: "Settings", href: "/" },
-    { name: "Sign out", href: "/logout" },
+    {
+      name: "Your Profile",
+      action: () => {
+        setOpenProfileSettings(!openProfileSettings);
+      },
+    },
+    ...(user.rights === "admin"
+      ? [{ name: "Settings", action: () => nav("/settings") }]
+      : []),
+    {
+      name: "Sign out",
+      action: () => {
+        axios.post("/api/logout").then(() => nav("/login"));
+      },
+    },
   ];
-
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
 
   return (
     <>
+      <Profile
+        open={openProfileSettings}
+        setOpen={setOpenProfileSettings}
+        user={user}
+        setUser={setUser}
+      />
       <div className="min-h-full">
         <Disclosure as="nav" className="bg-white border-b border-gray-200">
           {({ open }) => (
@@ -62,14 +80,6 @@ export default function NavBar({ currentPage }) {
                               ? " border-yellow-300 text-gray-900"
                               : " inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium")
                           }
-                          // className={(nav) => {
-                          //   classNames(
-                          //     nav.isActive
-                          //       ? "border-yellow-300 text-gray-900"
-                          //       : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                          //     "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                          //   );
-                          // }}
                           aria-current={(nav) => {
                             nav.isActive ? "page" : undefined;
                           }}
@@ -115,16 +125,15 @@ export default function NavBar({ currentPage }) {
                           {userNavigation.map((item) => (
                             <Menu.Item key={item.name}>
                               {({ active }) => (
-                                <NavLink
-                                  to={item.href}
+                                <a
+                                  onClick={item.action}
                                   className={
-                                    "block px-4 py-2 text-sm text-gray-700" +
+                                    "block px-4 py-2 text-sm text-gray-700 cursor-default" +
                                     (active ? " bg-gray-100" : "")
                                   }
-                                  end
                                 >
                                   {item.name}
-                                </NavLink>
+                                </a>
                               )}
                             </Menu.Item>
                           ))}
@@ -193,9 +202,9 @@ export default function NavBar({ currentPage }) {
                     {userNavigation.map((item) => (
                       <Disclosure.Button
                         key={item.name}
-                        as={NavLink}
-                        to={item.href}
-                        className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                        as="a"
+                        onClick={item.action}
+                        className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 cursor-default"
                       >
                         {item.name}
                       </Disclosure.Button>
