@@ -1,6 +1,13 @@
 import { LightningBoltIcon } from "@heroicons/react/outline";
+import axios from "axios";
 
 export default function EquipmentCards({ equipment }) {
+  const handleTrigger = async (equipmentId) => {
+    await axios.post("/api/trigger_equipment", {
+      equipmentId: equipmentId,
+    });
+  };
+
   return (
     <ul
       role="list"
@@ -45,27 +52,33 @@ export default function EquipmentCards({ equipment }) {
               {item[0] && (
                 <div className="w-0 flex-1 flex">
                   <a
-                    href={`mailto:${item.equipmentName}`}
-                    className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500"
+                    onClick={() => {
+                      handleTrigger(item[0].equipmentId);
+                    }}
+                    className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 cursor-default"
                   >
                     <LightningBoltIcon
-                      className="w-5 h-5 text-yellow-400"
+                      className="w-5 h-5 text-yellow-400 mr-3"
                       aria-hidden="true"
                     />
-                    <span className="ml-3">Trigger</span>
+                    Trigger
                   </a>
                 </div>
               )}
               <div className="-ml-px w-0 flex-1 flex">
                 <a
-                  href={`tel:${item.equipmentName}`}
-                  className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500"
+                  onClick={() => {
+                    item[1]
+                      ? handleTrigger(item[1].equipmentId)
+                      : handleTrigger(item.equipmentId);
+                  }}
+                  className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500 cursor-default"
                 >
                   <LightningBoltIcon
-                    className="w-5 h-5 text-yellow-400"
+                    className="w-5 h-5 text-yellow-400 mr-3"
                     aria-hidden="true"
                   />
-                  <span className="ml-3">Trigger</span>
+                  Trigger
                 </a>
               </div>
             </div>

@@ -1,21 +1,13 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useState } from "react";
-import { ExclamationCircleIcon } from "@heroicons/react/outline";
 import axios from "axios";
-
-import Notification from "../components/Notification";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const nav = useNavigate();
-  const [loginError, setLoginError] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit } = useForm();
 
   const onSubmit = (data) => {
     axios
@@ -27,17 +19,17 @@ export default function Login() {
         },
         { withCredentials: true }
       )
-      .then((response) => {
+      .then(() => {
         nav("/");
       })
       .catch((err) => {
-        setLoginError(err.response.data.msg);
+        toast.error(err.response.data.msg);
       });
   };
 
   return (
     <>
-      <div className="flex h-screen min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="flex h-screen min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Log in to your account
@@ -50,7 +42,7 @@ export default function Login() {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="my-2">
                 <label
-                  htmlFor="email"
+                  htmlFor="username"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Username
@@ -62,17 +54,7 @@ export default function Login() {
                     placeholder="Username"
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 sm:text-sm"
                   />
-                  {errors.username && (
-                    <Notification
-                      type={
-                        <ExclamationCircleIcon
-                          className="h-6 w-6 text-red-500"
-                          aria-hidden="true"
-                        />
-                      }
-                      message="Username field is required!"
-                    />
-                  )}
+                  <div className="hidden"></div>
                 </div>
               </div>
 
@@ -91,17 +73,6 @@ export default function Login() {
                     {...register("password", { required: true })}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 sm:text-sm"
                   />
-                  {errors.password && (
-                    <Notification
-                      type={
-                        <ExclamationCircleIcon
-                          className="h-6 w-6 text-red-500"
-                          aria-hidden="true"
-                        />
-                      }
-                      message="Password field is required!"
-                    />
-                  )}
                 </div>
               </div>
 
@@ -112,17 +83,7 @@ export default function Login() {
                 >
                   Log in
                 </button>
-                {loginError && (
-                  <Notification
-                    type={
-                      <ExclamationCircleIcon
-                        className="h-6 w-6 text-red-500"
-                        aria-hidden="true"
-                      />
-                    }
-                    message={loginError}
-                  />
-                )}
+                <div className="hidden"></div>
               </div>
             </form>
           </div>

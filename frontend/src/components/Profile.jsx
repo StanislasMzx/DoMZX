@@ -3,12 +3,11 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import Alert from "./Alert.jsx";
+import toast from "react-hot-toast";
 
 export default function Profile({ open, setOpen, user, setUser }) {
   // const [open, setOpen] = useState(true)
   const [validateChanges, setValidateChanges] = useState(null);
-  const [displayChangesModal, setDisplayChangesModal] = useState(false);
   const {
     register,
     handleSubmit,
@@ -58,12 +57,6 @@ export default function Profile({ open, setOpen, user, setUser }) {
                         Profile settings
                       </Dialog.Title>
                       <div className="ml-3 h-7 flex items-center">
-                        <Alert
-                          success={validateChanges?.msg ? false : true}
-                          message={validateChanges?.msg || "Successful changes"}
-                          open={displayChangesModal}
-                          setOpen={setDisplayChangesModal}
-                        />
                         <button
                           type="button"
                           className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-300"
@@ -79,8 +72,11 @@ export default function Profile({ open, setOpen, user, setUser }) {
                     <form
                       className="space-y-8 divide-y divide-gray-200"
                       onClick={handleSubmit(async (data) => {
-                        onSubmit(data);
-                        setDisplayChangesModal(!displayChangesModal);
+                        toast.promise(onSubmit(data), {
+                          loading: "Loading",
+                          success: "Successful changes",
+                          error: "Error when modifying",
+                        });
                         setOpen(false);
                       })}
                     >
@@ -199,7 +195,7 @@ export default function Profile({ open, setOpen, user, setUser }) {
                           </button>
                           <button
                             type="submit"
-                            className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-300 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-300"
+                            className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-yellow-300 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-300"
                           >
                             Save
                           </button>
