@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Users() {
   const [isLoading, setIsLoading] = useState(true);
@@ -103,8 +104,8 @@ export default function Users() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <a
-                        href="#"
-                        className="text-yellow-400 hover:text-yellow-500"
+                        onClick={() => toast.error("Feature not available yet")}
+                        className="text-yellow-400 hover:text-yellow-500 cursor-default"
                       >
                         Edit
                       </a>
@@ -136,8 +137,8 @@ export default function Users() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <a
-                      href="#"
-                      className="text-yellow-400 hover:text-yellow-500"
+                      onClick={() => toast.error("Feature not available yet")}
+                      className="text-yellow-400 hover:text-yellow-500 cursor-default"
                     >
                       Add
                     </a>
