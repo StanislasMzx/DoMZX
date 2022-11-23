@@ -1,32 +1,42 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
+import { useMutation, useQueryClient } from "react-query";
+import apiClient from "../http-common";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import toast from "react-hot-toast";
 
-export default function Profile({ open, setOpen, user, setUser }) {
-  // const [open, setOpen] = useState(true)
-  const [validateChanges, setValidateChanges] = useState(null);
+export default function Profile({ open, setOpen, user }) {
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
+  const modifyProfile = async (formData) => {
+    return await apiClient.post("/api/modify_profile", {
+      imageUrl: formData.imageUrl,
+      oldPassword: formData.oldPassword,
+      newPassword: formData.newPassword,
+      confirmPassword: formData.confirmPassword,
+    });
+  };
+  const modifyProfileMutate = useMutation(modifyProfile, {
+    onError: (error, variable, contexte) =>
+      console.error(error?.response?.data?.msg),
+    onSuccess: (data, variable, contexte) => {
+      queryClient.invalidateQueries("userInfo");
+      setOpen(!open);
+    },
+  });
 
-  const onSubmit = async (data) => {
-    try {
-      const response = await axios.post("/api/modify_profile", {
-        imageUrl: data.imageUrl,
-        oldPassword: data.oldPassword,
-        newPassword: data.newPassword,
-        confirmPassword: data.confirmPassword,
-      });
-      setValidateChanges(response?.data);
-    } catch (err) {
-      setValidateChanges(err?.response?.data);
-    }
+  const onSubmit = (data) => {
+    toast.promise(modifyProfileMutate.mutateAsync(data), {
+      loading: "Loading...",
+      error: (err) => err?.response?.data?.msg,
+      success: "Changes have been saved",
+    });
   };
 
   return (
@@ -71,14 +81,7 @@ export default function Profile({ open, setOpen, user, setUser }) {
                   <div className="mt-6 relative flex-1 px-4 sm:px-6">
                     <form
                       className="space-y-8 divide-y divide-gray-200"
-                      onClick={handleSubmit(async (data) => {
-                        toast.promise(onSubmit(data), {
-                          loading: "Loading",
-                          success: "Successful changes",
-                          error: "Error when modifying",
-                        });
-                        setOpen(false);
-                      })}
+                      onSubmit={handleSubmit(onSubmit)}
                     >
                       <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
                         <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
@@ -98,6 +101,7 @@ export default function Profile({ open, setOpen, user, setUser }) {
                                     field !== "" || watch("oldPassword") !== "",
                                 })}
                                 placeholder={user.imageUrl}
+                                autoComplete="off"
                                 className={
                                   "flex-1 block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300" +
                                   (errors.imageUrl

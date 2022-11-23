@@ -1,26 +1,33 @@
-import axios from "axios";
-import { useEffect } from "react";
-import { useState } from "react";
+import React from "react";
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import apiClient from "../http-common";
+import { TrashIcon } from "@heroicons/react/outline";
+import toast from "react-hot-toast";
 
-export default function TimerList({ reload }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [cron, setCron] = useState({});
-
-  useEffect(() => {
-    const getCron = async () => {
-      try {
-        const response = await axios.post("/api/timer_list");
-        setCron(response?.data);
-      } catch (err) {
-        console.error(err?.response);
-      }
-      setIsLoading(false);
-    };
-    getCron();
-  }, [setIsLoading, setCron]);
+export default function TimerList() {
+  const queryClient = useQueryClient();
+  const fetchCron = async () => {
+    return await apiClient.get("/api/timer_list");
+  };
+  const { isLoading, data: cron, isError } = useQuery("timerList", fetchCron);
+  const deleteCron = async (clickCronId) => {
+    return await apiClient.post("/api/timer_delete", {
+      cronId: clickCronId,
+    });
+  };
+  const deleteCronMutation = useMutation(deleteCron, {
+    onError: (error, variable, contexte) =>
+      console.error(error?.response?.data?.msg),
+    onSuccess: (data, variable, contexte) => {
+      queryClient.invalidateQueries("timerList");
+    },
+  });
 
   if (isLoading) {
-    return <>{reload}</>;
+    return <></>;
+  }
+  if (isError) {
+    return <>An error occurred</>;
   }
 
   return (
@@ -67,10 +74,13 @@ export default function TimerList({ reload }) {
                   >
                     Command
                   </th>
+                  <th scope="col" className="relative px-6 py-3">
+                    <span className="sr-only"></span>
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {cron.map((item, index) => (
+                {cron?.data.map((item, index) => (
                   <tr key={index}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {item.minute}
@@ -113,6 +123,24 @@ export default function TimerList({ reload }) {
                             : ""}
                         </code>
                       </a>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      {/* <a className="text-yellow-400 hover:text-yellow-500 cursor-default">
+                        Edit
+                      </a> */}
+                      <TrashIcon
+                        className="h-6 w-6 text-yellow-700"
+                        onClick={() =>
+                          toast.promise(
+                            deleteCronMutation.mutateAsync(item.cron_id),
+                            {
+                              loading: "Loading...",
+                              error: "An error occurred",
+                              success: "Task deleted",
+                            }
+                          )
+                        }
+                      />
                     </td>
                   </tr>
                 ))}

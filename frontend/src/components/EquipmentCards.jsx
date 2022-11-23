@@ -1,12 +1,15 @@
 import { LightningBoltIcon } from "@heroicons/react/outline";
-import axios from "axios";
+import { useMutation } from "react-query";
+import apiClient from "../http-common";
+import { toast } from "react-hot-toast";
 
 export default function EquipmentCards({ equipment }) {
   const handleTrigger = async (equipmentId) => {
-    await axios.post("/api/trigger_equipment", {
+    await apiClient.post("/api/trigger_equipment", {
       equipmentId: equipmentId,
     });
   };
+  const handleTriggerMutate = useMutation(handleTrigger);
 
   return (
     <ul
@@ -53,7 +56,14 @@ export default function EquipmentCards({ equipment }) {
                 <div className="w-0 flex-1 flex">
                   <a
                     onClick={() => {
-                      handleTrigger(item[0].equipmentId);
+                      toast.promise(
+                        handleTriggerMutate.mutateAsync(item[0]?.equipmentId),
+                        {
+                          loading: "Loading...",
+                          error: "An error occurred",
+                          success: "Equipment triggered",
+                        }
+                      );
                     }}
                     className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 cursor-default"
                   >
@@ -61,7 +71,7 @@ export default function EquipmentCards({ equipment }) {
                       className="w-5 h-5 text-yellow-400 mr-3"
                       aria-hidden="true"
                     />
-                    Trigger
+                    {item[0]?.equipmentId ? item[0]?.equipmentName : "Trigger"}
                   </a>
                 </div>
               )}
@@ -69,8 +79,22 @@ export default function EquipmentCards({ equipment }) {
                 <a
                   onClick={() => {
                     item[1]
-                      ? handleTrigger(item[1].equipmentId)
-                      : handleTrigger(item.equipmentId);
+                      ? toast.promise(
+                          handleTriggerMutate.mutateAsync(item[1]?.equipmentId),
+                          {
+                            loading: "Loading...",
+                            error: "An error occurred",
+                            success: "Equipment triggered",
+                          }
+                        )
+                      : toast.promise(
+                          handleTriggerMutate.mutateAsync(item?.equipmentId),
+                          {
+                            loading: "Loading...",
+                            error: "An error occurred",
+                            success: "Equipment triggered",
+                          }
+                        );
                   }}
                   className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500 cursor-default"
                 >
@@ -78,7 +102,7 @@ export default function EquipmentCards({ equipment }) {
                     className="w-5 h-5 text-yellow-400 mr-3"
                     aria-hidden="true"
                   />
-                  Trigger
+                  {item[1]?.equipmentId ? item[1]?.equipmentName : "Trigger"}
                 </a>
               </div>
             </div>

@@ -1,30 +1,31 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { useState } from "react";
-import axios from "axios";
+import apiClient from "../http-common";
+import { useMutation } from "react-query";
 import toast from "react-hot-toast";
 
 export default function Login() {
   const nav = useNavigate();
 
   const { register, handleSubmit } = useForm();
+  const loginInto = async (formData) => {
+    return await apiClient.post("/api/login", {
+      username: formData.username,
+      password: formData.password,
+    });
+  };
+  const loginMutate = useMutation(loginInto, {
+    onError: (error, variable, contexte) =>
+      console.error(error?.response?.data?.msg),
+    onSuccess: (data, variable, contexte) => nav("/"),
+  });
 
   const onSubmit = (data) => {
-    axios
-      .post(
-        "/api/login",
-        {
-          username: data.username,
-          password: data.password,
-        },
-        { withCredentials: true }
-      )
-      .then(() => {
-        nav("/");
-      })
-      .catch((err) => {
-        toast.error(err.response.data.msg);
-      });
+    toast.promise(loginMutate.mutateAsync(data), {
+      loading: "Loading...",
+      error: (err) => err?.response?.data?.msg,
+      success: "Welcome!",
+    });
   };
 
   return (

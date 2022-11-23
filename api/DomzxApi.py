@@ -75,36 +75,16 @@ class Logout(Resource):
         return response
 
 
-class Auth(Resource):
-    decorators = [jwt_required(optional=True)]
-
-    def post(self):
-        current_identity = get_jwt_identity()
-        if current_identity == None:
-            return jsonify({"logged_in": False})
-        else:
-            print(current_identity)
-            return jsonify({"logged_in": True})
-
-
 class WhoAmI(Resource):
     decorators = [jwt_required()]
 
-    def post(self):
+    def get(self):
         current_user = query_db(
             'select * from users where username = ?', (get_jwt_identity(),), one=True)
         return jsonify({"username": current_user[0],
                         "rights": current_user[2],
                         "expiration": current_user[3],
                         "imageUrl": current_user[4]})
-
-
-class EquipmentList(Resource):
-    decorators = [jwt_required()]
-
-    def post(self):
-        equipment = query_db('select * from wiring')
-        return equipment_state(equipment)
 
 
 class ModifyProfile(Resource):
@@ -147,7 +127,7 @@ class ModifyProfile(Resource):
 class UsersList(Resource):
     decorators = [jwt_required()]
 
-    def post(self):
+    def get(self):
         current_user = get_jwt_identity()
         if query_db('select rights from users where username = ?', (current_user,), one=True)[0] != "admin":
             return {"msg": "You are not admin"}, 403
@@ -157,6 +137,14 @@ class UsersList(Resource):
             users[i] = {"username": e[0], "rights": e[2],
                         "expiration": e[3], "imageUrl": e[4]}
         return jsonify(users)
+
+
+class EquipmentList(Resource):
+    decorators = [jwt_required()]
+
+    def get(self):
+        equipment = query_db('select * from wiring')
+        return equipment_state(equipment)
 
 
 class TriggerEquipment(Resource):
@@ -181,7 +169,7 @@ class TriggerEquipment(Resource):
 class LogsList(Resource):
     decorators = [jwt_required()]
 
-    def post(self):
+    def get(self):
         logs = query_db(
             'select logs.username, logs.date, wiring.equipmentName from logs join wiring on wiring.equipmentId = logs.equipmentId')
         for i, e in enumerate(logs):
@@ -192,7 +180,7 @@ class LogsList(Resource):
 class TimerList(Resource):
     decorators = [jwt_required()]
 
-    def post(self):
+    def get(self):
         timerList = list_crontab()
         for e in timerList:
             e["equipment_name"] = query_db(
@@ -239,3 +227,23 @@ class TimerNew(Resource):
                                  (request_equipment_to_trigger,), one=True)
             create_cron(moment, equipment[2], equipment[3])
         return jsonify({"cron_created": True})
+
+
+class TimerDelete(Resource):
+    decorators = [jwt_required()]
+
+    def post(self):
+        current_user = get_jwt_identity()
+        if query_db('select rights from users where username = ?', (current_user,), one=True)[0] != "admin":
+            return {"msg": "You are not admin"}, 403
+
+        parser = reqparse.RequestParser()
+        parser.add_argument("cronId", type=str)
+
+        args = parser.parse_args()
+
+        request_cronId = args['cronId']
+
+        delete_cron(request_cronId)
+
+        return jsonify({"msg": "Cron deleted"})

@@ -1,7 +1,7 @@
 from flask import Flask, send_from_directory, g
 from flask_restful import Api
 from flask_cors import CORS  # comment this on deployment
-from api.DomzxApi import Login, Logout, Auth, WhoAmI, EquipmentList, ModifyProfile, UsersList, TriggerEquipment, LogsList, TimerList, TimerNew
+from api.DomzxApi import Login, Logout, WhoAmI, EquipmentList, ModifyProfile, UsersList, TriggerEquipment, LogsList, TimerList, TimerNew, TimerDelete
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
 
@@ -36,7 +36,6 @@ def not_found(e):
 
 api.add_resource(Login, '/api/login')
 api.add_resource(Logout, '/api/logout')
-api.add_resource(Auth, '/api/auth')
 api.add_resource(WhoAmI, '/api/whoami')
 api.add_resource(EquipmentList, '/api/equipment_list')
 api.add_resource(ModifyProfile, '/api/modify_profile')
@@ -45,7 +44,7 @@ api.add_resource(TriggerEquipment, '/api/trigger_equipment')
 api.add_resource(LogsList, '/api/logs_list')
 api.add_resource(TimerList, '/api/timer_list')
 api.add_resource(TimerNew, '/api/timer_new')
-
+api.add_resource(TimerDelete, '/api/timer_delete')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

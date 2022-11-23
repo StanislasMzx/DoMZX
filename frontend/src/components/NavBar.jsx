@@ -1,27 +1,36 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, Fragment } from "react";
 import { NavLink } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon, HomeIcon } from "@heroicons/react/outline";
 import { useNavigate } from "react-router-dom";
 import Profile from "./Profile";
-import axios from "axios";
+import apiClient from "../http-common";
+import { useQuery, useMutation } from "react-query";
+import toast from "react-hot-toast";
 
 export default function NavBar() {
-  const [user, setUser] = useState({});
-  const [openProfileSettings, setOpenProfileSettings] = useState(false);
-
-  useEffect(() => {
-    axios
-      .post("/api/whoami")
-      .then((response) => {
-        setUser(response.data);
-      })
-      .catch((err) => {
-        setUser(err.response.data);
-      });
-  }, [setUser]);
-
   const nav = useNavigate();
+  const [openProfileSettings, setOpenProfileSettings] = useState(false);
+  const fetchUser = async () => {
+    return await apiClient.get("/api/whoami");
+  };
+  const { isLoading, data: user, isError } = useQuery("userInfo", fetchUser);
+  const handleLogout = async () => {
+    return await apiClient.post("/api/logout");
+  };
+  const handleLogoutMutate = useMutation(handleLogout, {
+    onError: (error, variable, contexte) =>
+      console.error(error?.response?.data?.msg),
+    onSuccess: (data, variable, contexte) => nav("/login"),
+  });
+
+  if (isLoading) {
+    return <></>;
+  }
+  if (isError) {
+    return <>An error occurred</>;
+  }
+
   const navigation = [
     { name: "Dashboard", href: "/" },
     { name: "Timer", href: "/timer" },
@@ -34,13 +43,17 @@ export default function NavBar() {
         setOpenProfileSettings(!openProfileSettings);
       },
     },
-    ...(user.rights === "admin"
+    ...(user?.data?.rights === "admin"
       ? [{ name: "Settings", action: () => nav("/settings") }]
       : []),
     {
       name: "Sign out",
       action: () => {
-        axios.post("/api/logout").then(() => nav("/login"));
+        toast.promise(handleLogoutMutate.mutateAsync(), {
+          loading: "Loading...",
+          error: "An error occurred",
+          success: "See you later!",
+        });
       },
     },
   ];
@@ -50,8 +63,8 @@ export default function NavBar() {
       <Profile
         open={openProfileSettings}
         setOpen={setOpenProfileSettings}
-        user={user}
-        setUser={setUser}
+        user={user?.data}
+        // setUser={setUser}
       />
       <div className="min-h-full">
         <Disclosure as="nav" className="bg-white border-b border-gray-200">
@@ -65,7 +78,7 @@ export default function NavBar() {
                         className="h-8 w-8 text-yellow-300"
                         aria-hidden="true"
                       />
-                      <h1 className="text-xl font-bold text-yellow-300">
+                      <h1 className="text-xl font-bold text-yellow-300 font-monoton">
                         DoMZX
                       </h1>
                     </div>
@@ -93,10 +106,10 @@ export default function NavBar() {
                   <div className="hidden sm:ml-6 sm:flex sm:items-center">
                     <div className="ml-3">
                       <div className="text-base font-medium text-gray-800">
-                        {user && user.username}
+                        {user?.data?.username}
                       </div>
                       <div className="text-sm font-medium text-gray-500">
-                        {user && user.rights}
+                        {user?.data?.rights}
                       </div>
                     </div>
 
@@ -107,7 +120,7 @@ export default function NavBar() {
                           <span className="sr-only">Open user menu</span>
                           <img
                             className="h-8 w-8 rounded-full"
-                            src={user && user.imageUrl}
+                            src={user?.data?.imageUrl}
                             alt=""
                           />
                         </Menu.Button>
@@ -185,16 +198,16 @@ export default function NavBar() {
                     <div className="flex-shrink-0">
                       <img
                         className="h-10 w-10 rounded-full"
-                        src={user && user.imageUrl}
+                        src={user?.data?.imageUrl}
                         alt=""
                       />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium text-gray-800">
-                        {user && user.username}
+                        {user?.data?.username}
                       </div>
                       <div className="text-sm font-medium text-gray-500">
-                        {user && user.rights}
+                        {user?.data?.rights}
                       </div>
                     </div>
                   </div>
