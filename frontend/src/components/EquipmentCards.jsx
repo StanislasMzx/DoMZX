@@ -62,6 +62,9 @@ export default function EquipmentCards({ equipment }) {
                           loading: "Loading...",
                           error: "An error occurred",
                           success: "Equipment triggered",
+                        },
+                        {
+                          success: { icon: "🔌" },
                         }
                       );
                     }}
@@ -85,6 +88,9 @@ export default function EquipmentCards({ equipment }) {
                             loading: "Loading...",
                             error: "An error occurred",
                             success: "Equipment triggered",
+                          },
+                          {
+                            success: { icon: "🔌" },
                           }
                         )
                       : toast.promise(
@@ -93,6 +99,9 @@ export default function EquipmentCards({ equipment }) {
                             loading: "Loading...",
                             error: "An error occurred",
                             success: "Equipment triggered",
+                          },
+                          {
+                            success: { icon: "🔌" },
                           }
                         );
                   }}

@@ -143,6 +143,9 @@ class EquipmentList(Resource):
     decorators = [jwt_required()]
 
     def get(self):
+        current_user = get_jwt_identity()
+        if query_db('select rights from users where username = ?', (current_user,), one=True)[0] != "admin":
+            return {"msg": "You are not admin"}, 403
         equipment = query_db('select * from wiring')
         return equipment_state(equipment)
 

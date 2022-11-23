@@ -5,6 +5,7 @@ import apiClient from "../http-common";
 import NavBar from "../components/NavBar";
 import TimerList from "../components/TimerList";
 import TimerNew from "../components/TimerNew";
+import Divider from "../components/Divider";
 
 function Timer() {
   const fetchUser = async () => {
@@ -33,21 +34,13 @@ function Timer() {
         </header>
         <main>
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div className="mb-6">
-              <h2 className="text-2xl text-gray-900 text-center font-medium uppercase text-yellow-400 mb-3">
-                Tasks List
-              </h2>
-              <TimerList />
-            </div>
-            {user?.data.rights === "admin" ? (
-              <div className="mb-6">
-                <h2 className="text-2xl text-gray-900 text-center font-medium uppercase text-yellow-400 mb-3">
-                  Add a new task
-                </h2>
+            <Divider title="TASK LIST" />
+            <TimerList />
+            {user?.data?.rights === "admin" && (
+              <>
+                <Divider title="NEW TIMER" />
                 <TimerNew />
-              </div>
-            ) : (
-              <></>
+              </>
             )}
           </div>
         </main>
