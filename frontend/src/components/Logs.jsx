@@ -1,26 +1,18 @@
-import axios from "axios";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useQuery } from "react-query";
+import apiClient from "../http-common";
+import toast from "react-hot-toast";
 
 export default function Logs() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [logs, setLogs] = useState({});
-
-  useEffect(() => {
-    const getLogs = async () => {
-      try {
-        const response = await axios.post("/api/logs_list");
-        setLogs(response?.data);
-      } catch (err) {
-        console.error(err?.response);
-      }
-      setIsLoading(false);
-    };
-    getLogs();
-  }, [setIsLoading, setLogs]);
+  const fetchLogs = async () => {
+    return await apiClient.get("/api/logs_list");
+  };
+  const { isLoading, data: logs, isError } = useQuery("logsList", fetchLogs);
 
   if (isLoading) {
     return <></>;
+  }
+  if (isError) {
+    return <>An error occurred</>;
   }
 
   return (
@@ -52,7 +44,7 @@ export default function Logs() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {logs.map((log, index) => (
+                {logs?.data.map((log, index) => (
                   <tr key={index}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="ml-4">

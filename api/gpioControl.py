@@ -1,6 +1,7 @@
 from flask import jsonify
 # import RPi.GPIO as GPIO
 from time import sleep
+from datetime import datetime
 from crontab import CronTab
 import sys
 
@@ -78,25 +79,35 @@ def list_crontab():
     with CronTab(user=True) as cron:
         for job in cron:
             e = job.render().split(" ", 5)
-            command = e[5].split(" ")
+            command = e[5].split(" ", 6)
             equipmentPin = command[2]
             checkState = command[3]
             force = command[4]
+            cronId = command[6]
 
-            res.append({"minute": e[0], "hour": e[1], "day_of_month": e[2],
+            res.append({"cron_id": cronId, "minute": e[0], "hour": e[1], "day_of_month": e[2],
                        "month": e[3], "day_of_week": e[4], "equipment_pin": equipmentPin, "check_state": checkState, "force": force})
     return res
 
 
 def create_cron(moment, pin, checkState, force=None):
     """
-    Create a enw cron that trigger the given pin at the given moment
+    Create a new cron that trigger the given pin at the given moment
     """
 
     with CronTab(user=True) as cron:
         job = cron.new(
-            command=f'python3 gpioControl.py {pin} {checkState} {force}')
+            command=f'python3 gpioControl.py {pin} {checkState} {force}', comment=f"{datetime.now()}")
         job.setall(moment)
+
+
+def delete_cron(cronId):
+    """
+    Delete the given cron
+    """
+
+    with CronTab(user=True) as cron:
+        cron.remove_all(comment=f"{cronId}")
 
 
 if __name__ == "__main__":

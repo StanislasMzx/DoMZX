@@ -1,58 +1,59 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import apiClient from "../http-common";
+import toast from "react-hot-toast";
 
 export default function TimerNew({ setReload }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [equipment, setEquipment] = useState({});
-  const [validateChanges, setValidateChanges] = useState(null);
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
+  const fetchEquipment = async () => {
+    return await apiClient.get("/api/equipment_list");
+  };
+  const {
+    isLoading,
+    data: equipment,
+    isError,
+  } = useQuery("equipmentList", fetchEquipment);
+  const addCron = async (formData) => {
+    return await apiClient.post("/api/timer_new", {
+      minute: formData.minute,
+      hour: formData.hour,
+      day_of_the_month: formData.day_of_the_month,
+      month: formData.month,
+      day_of_the_week: formData.day_of_the_week,
+      equipment_to_trigger: formData.equipment_to_trigger,
+    });
+  };
+  const addCronMutate = useMutation(addCron, {
+    onError: (error, variable, contexte) =>
+      toast.error(error?.response?.data?.msg),
+    onSuccess: (data, variable, contexte) => {
+      toast.success("New timer added");
+      queryClient.invalidateQueries("timerList");
+    },
+  });
 
-  useEffect(() => {
-    const getEquipmentList = async () => {
-      try {
-        const response = await axios.post("/api/equipment_list");
-        setEquipment(response.data);
-      } catch (err) {
-        console.error(err.response);
-      }
-      setIsLoading(false);
-    };
-    getEquipmentList();
-  }, [setEquipment, setIsLoading]);
+  const onSubmit = (data) => {
+    addCronMutate.mutate(data);
+  };
 
   if (isLoading) {
     return <></>;
   }
-
-  const onSubmit = async (data) => {
-    try {
-      const response = await axios.post("/api/timer_new", {
-        minute: data.minute,
-        hour: data.hour,
-        day_of_the_month: data.day_of_the_month,
-        month: data.month,
-        day_of_the_week: data.day_of_the_week,
-        equipment_to_trigger: data.equipment_to_trigger,
-      });
-      setValidateChanges(response?.data);
-      setReload(true);
-    } catch (err) {
-      setValidateChanges(err?.response?.data);
-    }
-  };
+  if (isError) {
+    return <>An error occurred</>;
+  }
 
   return (
     <form
       className="space-y-8 divide-y divide-gray-200"
-      onSubmit={handleSubmit(async (data) => {
-        onSubmit(data);
-      })}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
         <div className="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
@@ -169,7 +170,7 @@ export default function TimerNew({ setReload }) {
                   {...register("equipment_to_trigger", { required: true })}
                   className="max-w-lg block focus:ring-yellow-300 focus:border-yellow-300 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                 >
-                  {equipment.map((item) => {
+                  {equipment?.data.map((item) => {
                     if (item[0]) {
                       return (
                         <>

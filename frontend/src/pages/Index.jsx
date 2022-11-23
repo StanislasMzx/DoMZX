@@ -1,28 +1,24 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useQuery } from "react-query";
 import EquipmentCards from "../components/EquipmentCards";
-
 import NavBar from "../components/NavBar";
+import apiClient from "../http-common";
 
 function Index() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [equipment, setEquipment] = useState({});
-
-  useEffect(() => {
-    const getEquipmentList = async () => {
-      try {
-        const response = await axios.post("/api/equipment_list");
-        setEquipment(response.data);
-      } catch (err) {
-        console.error(err.response);
-      }
-      setIsLoading(false);
-    };
-    getEquipmentList();
-  }, [setEquipment, setIsLoading]);
+  const fetchEquipment = async () => {
+    return await apiClient.get("/api/equipment_list");
+  };
+  const {
+    isLoading,
+    data: equipment,
+    isError,
+  } = useQuery("equipmentList", fetchEquipment);
 
   if (isLoading) {
     return <></>;
+  }
+  if (isError) {
+    return <>An error occurred</>;
   }
 
   return (
@@ -39,7 +35,7 @@ function Index() {
         </header>
         <main>
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <EquipmentCards equipment={equipment} />
+            <EquipmentCards equipment={equipment?.data} />
           </div>
         </main>
       </div>

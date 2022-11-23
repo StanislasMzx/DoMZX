@@ -1,30 +1,24 @@
-import { useState, useEffect } from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../http-common";
+import { useQuery } from "react-query";
 
 function PrivateRoutes() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const checkLogin = async () => {
-      try {
-        const response = await axios.post("/api/auth");
-        setIsLoggedIn(response.data.logged_in);
-      } catch (err) {
-        setIsLoggedIn(false);
-        console.error(err.response);
-      }
-      setIsLoading(false);
-    };
-    checkLogin();
-  }, [setIsLoading, setIsLoggedIn]);
+  const fetchLogState = async () => {
+    return await apiClient.get("/api/whoami");
+  };
+  const {
+    isLoading,
+    data: isLogged,
+    isError,
+  } = useQuery("logState", fetchLogState, {
+    retry: 0,
+  });
 
   if (isLoading) {
     return <></>;
   }
 
-  if (!isLoggedIn) {
+  if (isError) {
     return <Navigate to="/login" />;
   }
 

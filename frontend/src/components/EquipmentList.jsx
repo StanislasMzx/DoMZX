@@ -1,27 +1,22 @@
-import axios from "axios";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useQuery } from "react-query";
+import apiClient from "../http-common";
 import toast from "react-hot-toast";
 
-export default function EquipmentList() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [equipment, setEquipment] = useState({});
-
-  useEffect(() => {
-    const getEquipment = async () => {
-      try {
-        const response = await axios.post("/api/equipment_list");
-        setEquipment(response?.data);
-      } catch (err) {
-        console.error(err?.response);
-      }
-      setIsLoading(false);
-    };
-    getEquipment();
-  }, [setIsLoading, setEquipment]);
+export default function Users() {
+  const fetchEquipment = async () => {
+    return await apiClient.get("/api/equipment_list");
+  };
+  const {
+    isLoading,
+    data: equipment,
+    isError,
+  } = useQuery("equipmentList", fetchEquipment);
 
   if (isLoading) {
     return <></>;
+  }
+  if (isError) {
+    return <>An error occurred</>;
   }
 
   return (
@@ -62,7 +57,7 @@ export default function EquipmentList() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {equipment.map((item) => {
+                {equipment?.data.map((item) => {
                   try {
                     return item.map((e) => (
                       <tr key={e.equipmentId}>

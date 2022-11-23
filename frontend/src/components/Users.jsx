@@ -1,27 +1,18 @@
-import axios from "axios";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useQuery } from "react-query";
+import apiClient from "../http-common";
 import toast from "react-hot-toast";
 
 export default function Users() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [users, setUsers] = useState({});
-
-  useEffect(() => {
-    const getUsers = async () => {
-      try {
-        const response = await axios.post("/api/users_list");
-        setUsers(response?.data);
-      } catch (err) {
-        console.error(err?.response);
-      }
-      setIsLoading(false);
-    };
-    getUsers();
-  }, [setIsLoading, setUsers]);
+  const fetchUsers = async () => {
+    return await apiClient.get("/api/users_list");
+  };
+  const { isLoading, data: users, isError } = useQuery("usersList", fetchUsers);
 
   if (isLoading) {
     return <></>;
+  }
+  if (isError) {
+    return <>An error occurred</>;
   }
 
   return (
@@ -62,7 +53,7 @@ export default function Users() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {users.map((person) => (
+                {users?.data.map((person) => (
                   <tr key={person.username}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">

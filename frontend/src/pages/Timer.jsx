@@ -1,30 +1,22 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useQuery } from "react-query";
+import apiClient from "../http-common";
 
 import NavBar from "../components/NavBar";
 import TimerList from "../components/TimerList";
 import TimerNew from "../components/TimerNew";
 
 function Timer() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState({});
-  const [reload, setReload] = useState(false);
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await axios.post("/api/whoami");
-        setUser(response.data);
-      } catch (err) {
-        console.error(err.response);
-      }
-      setIsLoading(false);
-    };
-    getUser();
-  }, [setUser, setIsLoading]);
+  const fetchUser = async () => {
+    return await apiClient.get("/api/whoami");
+  };
+  const { isLoading, data: user, isError } = useQuery("userInfo", fetchUser);
 
   if (isLoading) {
     return <></>;
+  }
+  if (isError) {
+    return <>An error occurred</>;
   }
 
   return (
@@ -45,14 +37,14 @@ function Timer() {
               <h2 className="text-2xl text-gray-900 text-center font-medium uppercase text-yellow-400 mb-3">
                 Tasks List
               </h2>
-              <TimerList reload={reload} />
+              <TimerList />
             </div>
-            {user.rights === "admin" ? (
+            {user?.data.rights === "admin" ? (
               <div className="mb-6">
                 <h2 className="text-2xl text-gray-900 text-center font-medium uppercase text-yellow-400 mb-3">
                   Add a new task
                 </h2>
-                <TimerNew setReload={setReload} />
+                <TimerNew />
               </div>
             ) : (
               <></>
