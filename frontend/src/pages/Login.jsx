@@ -21,11 +21,17 @@ export default function Login() {
   });
 
   const onSubmit = (data) => {
-    toast.promise(loginMutate.mutateAsync(data), {
-      loading: "Loading...",
-      error: (err) => err?.response?.data?.msg,
-      success: "Welcome!",
-    });
+    toast.promise(
+      loginMutate.mutateAsync(data),
+      {
+        loading: "Loading...",
+        error: (err) => err?.response?.data?.msg,
+        success: "Welcome!",
+      },
+      {
+        success: { icon: "👋" },
+      }
+    );
   };
 
   return (

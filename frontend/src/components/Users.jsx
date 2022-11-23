@@ -1,18 +1,35 @@
 import { useQuery } from "react-query";
 import apiClient from "../http-common";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 export default function Users() {
+  const [errorMessage, setErrorMessage] = useState("An error occurred");
   const fetchUsers = async () => {
     return await apiClient.get("/api/users_list");
   };
-  const { isLoading, data: users, isError } = useQuery("usersList", fetchUsers);
+  const {
+    isLoading,
+    data: users,
+    isError,
+  } = useQuery("usersList", fetchUsers, {
+    onError: (error) => setErrorMessage(error?.response?.data?.msg),
+  });
 
   if (isLoading) {
-    return <></>;
+    return (
+      <div className="hidden">
+        {toast.loading("Loading...", { id: "usersListLoading" })}
+      </div>
+    );
   }
+  toast.dismiss("usersListLoading");
   if (isError) {
-    return <>An error occurred</>;
+    return (
+      <div className="hidden">
+        {toast.error(errorMessage, { id: "usersListError" })}
+      </div>
+    );
   }
 
   return (

@@ -49,11 +49,17 @@ export default function NavBar() {
     {
       name: "Sign out",
       action: () => {
-        toast.promise(handleLogoutMutate.mutateAsync(), {
-          loading: "Loading...",
-          error: "An error occurred",
-          success: "See you later!",
-        });
+        toast.promise(
+          handleLogoutMutate.mutateAsync(),
+          {
+            loading: "Loading...",
+            error: "An error occurred",
+            success: "See you later!",
+          },
+          {
+            success: { icon: "👋" },
+          }
+        );
       },
     },
   ];

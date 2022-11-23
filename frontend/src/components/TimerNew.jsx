@@ -51,158 +51,153 @@ export default function TimerNew({ setReload }) {
   }
 
   return (
-    <form
-      className="space-y-8 divide-y divide-gray-200"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-        <div className="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
-          <div className="space-y-6 sm:space-y-5">
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                Minute
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <input
-                  type="text"
-                  name="minute"
-                  {...register("minute", {
-                    required: true,
-                  })}
-                  placeholder="0-59 or *"
-                  className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-              {errors.minute && (
-                <p className="text-red-500 text-medium italic">
-                  This field is required
-                </p>
-              )}
+    <form className="space-y-8 divide-y " onSubmit={handleSubmit(onSubmit)}>
+      <div className="space-y-8 divide-y  sm:space-y-5">
+        <div className="space-y-6 sm:space-y-5">
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5">
+            <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+              Minute
+            </label>
+            <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <input
+                type="text"
+                name="minute"
+                {...register("minute", {
+                  required: true,
+                })}
+                placeholder="0-59 or *"
+                className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
+            {errors.minute && (
+              <p className="text-red-500 text-medium italic">
+                This field is required
+              </p>
+            )}
+          </div>
 
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                Hour
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <input
-                  type="text"
-                  name="hour"
-                  {...register("hour", { required: true })}
-                  placeholder="0-23 or *"
-                  className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-              {errors.hour && (
-                <p className="text-red-500 text-medium italic">
-                  This field is required
-                </p>
-              )}
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5">
+            <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+              Hour
+            </label>
+            <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <input
+                type="text"
+                name="hour"
+                {...register("hour", { required: true })}
+                placeholder="0-23 or *"
+                className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
+            {errors.hour && (
+              <p className="text-red-500 text-medium italic">
+                This field is required
+              </p>
+            )}
+          </div>
 
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                Day of the month
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <input
-                  type="text"
-                  name="day_of_the_month"
-                  {...register("day_of_the_month", { required: true })}
-                  placeholder="1-31 or *"
-                  className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-              {errors.day_of_the_month && (
-                <p className="text-red-500 text-medium italic">
-                  This field is required
-                </p>
-              )}
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5">
+            <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+              Day of the month
+            </label>
+            <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <input
+                type="text"
+                name="day_of_the_month"
+                {...register("day_of_the_month", { required: true })}
+                placeholder="1-31 or *"
+                className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
+            {errors.day_of_the_month && (
+              <p className="text-red-500 text-medium italic">
+                This field is required
+              </p>
+            )}
+          </div>
 
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                Month
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <input
-                  type="text"
-                  name="month"
-                  {...register("month", { required: true })}
-                  placeholder="1-12 or *"
-                  className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-              {errors.month && (
-                <p className="text-red-500 text-medium italic">
-                  This field is required
-                </p>
-              )}
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5">
+            <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+              Month
+            </label>
+            <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <input
+                type="text"
+                name="month"
+                {...register("month", { required: true })}
+                placeholder="1-12 or *"
+                className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
+            {errors.month && (
+              <p className="text-red-500 text-medium italic">
+                This field is required
+              </p>
+            )}
+          </div>
 
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                Day of the week
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <input
-                  type="text"
-                  name="day_of_the_week"
-                  {...register("day_of_the_week", { required: true })}
-                  placeholder="0-6 or *"
-                  className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-              {errors.day_of_the_week && (
-                <p className="text-red-500 text-medium italic">
-                  This field is required
-                </p>
-              )}
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5">
+            <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+              Day of the week
+            </label>
+            <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <input
+                type="text"
+                name="day_of_the_week"
+                {...register("day_of_the_week", { required: true })}
+                placeholder="0-6 or *"
+                className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
+            {errors.day_of_the_week && (
+              <p className="text-red-500 text-medium italic">
+                This field is required
+              </p>
+            )}
+          </div>
 
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                Equipment to trigger
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <select
-                  name="equipment_to_trigger"
-                  {...register("equipment_to_trigger", { required: true })}
-                  className="max-w-lg block focus:ring-yellow-300 focus:border-yellow-300 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                >
-                  {equipment?.data.map((item) => {
-                    if (item[0]) {
-                      return (
-                        <>
-                          <option value={item[0].equipmentId}>
-                            {item[0].equipmentName}
-                          </option>
-                          <option value={item[1].equipmentId}>
-                            {item[1].equipmentName}
-                          </option>
-                        </>
-                      );
-                    } else {
-                      return (
-                        <>
-                          <option value={item.equipmentId + "-on"}>
-                            {item.equipmentName} ON
-                          </option>
-                          <option value={item.equipmentId + "-off"}>
-                            {item.equipmentName} OFF
-                          </option>
-                        </>
-                      );
-                    }
-                  })}
-                </select>
-              </div>
-              {errors.equipment_to_trigger && (
-                <p className="text-red-500 text-medium italic">
-                  This field is required
-                </p>
-              )}
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5">
+            <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+              Equipment to trigger
+            </label>
+            <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <select
+                name="equipment_to_trigger"
+                {...register("equipment_to_trigger", { required: true })}
+                className="max-w-lg block focus:ring-yellow-300 focus:border-yellow-300 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+              >
+                {equipment?.data.map((item) => {
+                  if (item[0]) {
+                    return (
+                      <>
+                        <option value={item[0].equipmentId}>
+                          {item[0].equipmentName}
+                        </option>
+                        <option value={item[1].equipmentId}>
+                          {item[1].equipmentName}
+                        </option>
+                      </>
+                    );
+                  } else {
+                    return (
+                      <>
+                        <option value={item.equipmentId + "-on"}>
+                          {item.equipmentName} ON
+                        </option>
+                        <option value={item.equipmentId + "-off"}>
+                          {item.equipmentName} OFF
+                        </option>
+                      </>
+                    );
+                  }
+                })}
+              </select>
             </div>
+            {errors.equipment_to_trigger && (
+              <p className="text-red-500 text-medium italic">
+                This field is required
+              </p>
+            )}
           </div>
         </div>
       </div>

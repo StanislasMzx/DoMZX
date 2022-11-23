@@ -1,8 +1,10 @@
 import { useQuery } from "react-query";
 import apiClient from "../http-common";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
-export default function Users() {
+export default function EquipmentList() {
+  const [errorMessage, setErrorMessage] = useState("An error occurred");
   const fetchEquipment = async () => {
     return await apiClient.get("/api/equipment_list");
   };
@@ -10,13 +12,24 @@ export default function Users() {
     isLoading,
     data: equipment,
     isError,
-  } = useQuery("equipmentList", fetchEquipment);
+  } = useQuery("equipmentList", fetchEquipment, {
+    onError: (error) => setErrorMessage(error?.response?.data?.msg),
+  });
 
   if (isLoading) {
-    return <></>;
+    return (
+      <div className="hidden">
+        {toast.loading("Loading...", { id: "equipmentListLoading" })}
+      </div>
+    );
   }
+  toast.dismiss("equipmentListLoading");
   if (isError) {
-    return <>An error occurred</>;
+    return (
+      <div className="hidden">
+        {toast.error(errorMessage, { id: "equipmentListError" })}
+      </div>
+    );
   }
 
   return (
