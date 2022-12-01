@@ -1,15 +1,22 @@
 import { LightningBoltIcon } from "@heroicons/react/outline";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import apiClient from "../http-common";
 import { toast } from "react-hot-toast";
 
 export default function EquipmentCards({ equipment }) {
+  const queryClient = useQueryClient();
   const handleTrigger = async (equipmentId) => {
     await apiClient.post("/api/trigger_equipment", {
       equipmentId: equipmentId,
     });
   };
-  const handleTriggerMutate = useMutation(handleTrigger);
+  const handleTriggerMutate = useMutation(handleTrigger, {
+    onError: (error, variable, contexte) =>
+      console.error(error?.response?.data?.msg),
+    onSuccess: (data, variable, contexte) => {
+      queryClient.invalidateQueries("equipmentList");
+    },
+  });
 
   return (
     <ul

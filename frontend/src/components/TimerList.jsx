@@ -125,18 +125,18 @@ export default function TimerList() {
                       </a>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      {/* <a className="text-yellow-400 hover:text-yellow-500 cursor-default">
-                        Edit
-                      </a> */}
                       <TrashIcon
-                        className="h-6 w-6 text-yellow-700"
+                        className="h-6 w-6 text-yellow-800"
                         onClick={() =>
                           toast.promise(
                             deleteCronMutation.mutateAsync(item.cron_id),
                             {
                               loading: "Loading...",
-                              error: "An error occurred",
+                              error: (err) => err?.response?.data?.msg,
                               success: "Task deleted",
+                            },
+                            {
+                              success: { icon: "🕛" },
                             }
                           )
                         }

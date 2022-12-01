@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import apiClient from "../http-common";
 import toast from "react-hot-toast";
 
-export default function TimerNew({ setReload }) {
+export default function TimerNew() {
   const queryClient = useQueryClient();
   const {
     register,
@@ -34,13 +34,22 @@ export default function TimerNew({ setReload }) {
     onError: (error, variable, contexte) =>
       toast.error(error?.response?.data?.msg),
     onSuccess: (data, variable, contexte) => {
-      toast.success("New timer added");
       queryClient.invalidateQueries("timerList");
     },
   });
 
   const onSubmit = (data) => {
-    addCronMutate.mutate(data);
+    toast.promise(
+      addCronMutate.mutateAsync(data),
+      {
+        loading: "Loading...",
+        error: "An error occurred",
+        success: "New timer added",
+      },
+      {
+        success: { icon: "🕛" },
+      }
+    );
   };
 
   if (isLoading) {

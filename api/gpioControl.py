@@ -13,6 +13,8 @@ from random import choice  # Fake GPIO Class
 
 
 class GPIOClass:
+    GPIOPINS = {"4": 0, "17": 0, "18": 0, "22": 0, "23": 0, "27": 0}
+
     def setup(self, pin, mode):
         print(f'GPIO.setup({pin}, {mode})')
 
@@ -20,9 +22,10 @@ class GPIOClass:
         return "OUT"
 
     def input(self, pin):
-        return choice([0, 1])
+        return GPIOClass.GPIOPINS[f"{pin}"]
 
     def output(self, pin, state):
+        GPIOClass.GPIOPINS[f"{pin}"] = state
         print(f'GPIO.output({pin}, {state})')
 
 
