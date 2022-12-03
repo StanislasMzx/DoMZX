@@ -27,7 +27,7 @@ export default function Logs() {
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Username
+                    Utilisateur
                   </th>
                   <th
                     scope="col"
@@ -39,7 +39,7 @@ export default function Logs() {
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Equipment
+                    Appareil
                   </th>
                 </tr>
               </thead>

@@ -32,29 +32,29 @@ export default function NavBar() {
   }
 
   const navigation = [
-    { name: "Dashboard", href: "/" },
+    { name: "Maison", href: "/" },
     { name: "Timer", href: "/timer" },
-    { name: "Logs", href: "/logs" },
+    { name: "Historique", href: "/logs" },
   ];
   const userNavigation = [
     {
-      name: "Your Profile",
+      name: "Mon profil",
       action: () => {
         setOpenProfileSettings(!openProfileSettings);
       },
     },
     ...(user?.data?.rights === "admin"
-      ? [{ name: "Settings", action: () => nav("/settings") }]
+      ? [{ name: "Paramètres", action: () => nav("/settings") }]
       : []),
     {
-      name: "Sign out",
+      name: "Se déconnecter",
       action: () => {
         toast.promise(
           handleLogoutMutate.mutateAsync(),
           {
-            loading: "Loading...",
-            error: "An error occurred",
-            success: "See you later!",
+            loading: "Chargement...",
+            error: "Une erreur est survenue",
+            success: "À bientôt",
           },
           {
             success: { icon: "👋" },
