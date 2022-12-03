@@ -1,13 +1,13 @@
 from flask import jsonify
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
 from crontab import CronTab
 import sys
 
-from random import choice  # Fake GPIO Class
+# from random import choice  # Fake GPIO Class
 
-# GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM)
 
 # Fake class to simulate raspberry pi gpios
 
@@ -29,7 +29,7 @@ class GPIOClass:
         print(f'GPIO.output({pin}, {state})')
 
 
-GPIO = GPIOClass()
+# GPIO = GPIOClass()
 
 
 def equipment_state(equipment_list):
@@ -100,7 +100,7 @@ def create_cron(moment, pin, checkState, force=None):
 
     with CronTab(user=True) as cron:
         job = cron.new(
-            command=f'python3 gpioControl.py {pin} {checkState} {force}', comment=f"{datetime.now()}")
+            command=f'python3 /home/pi/DoMZX/api/gpioControl.py {pin} {checkState} {force}', comment=f"{datetime.now()}")
         job.setall(moment)
 
 
