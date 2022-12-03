@@ -114,7 +114,7 @@ def delete_cron(cronId):
 
 
 if __name__ == "__main__":
-    from DomzxApi import update_db
+    from api.database import *
 
     trigger_equipment(sys.argv[1], sys.argv[2], sys.argv[3])
     update_db('insert into logs(username, equipmentId) values (timer robot, ?)',
