@@ -19,7 +19,7 @@ export default function EquipmentList() {
   if (isLoading) {
     return (
       <div className="hidden">
-        {toast.loading("Loading...", { id: "equipmentListLoading" })}
+        {toast.loading("Chargement...", { id: "equipmentListLoading" })}
       </div>
     );
   }
@@ -93,7 +93,9 @@ export default function EquipmentList() {
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <a
                             onClick={() =>
-                              toast.error("Feature not available yet")
+                              toast.error(
+                                "Fonctionnalité pas encore disponible"
+                              )
                             }
                             className="text-yellow-400 hover:text-yellow-500 cursor-default"
                           >
@@ -138,7 +140,9 @@ export default function EquipmentList() {
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <a
                             onClick={() =>
-                              toast.error("Feature not available yet")
+                              toast.error(
+                                "Fonctionnalité pas encore disponible"
+                              )
                             }
                             className="text-yellow-400 hover:text-yellow-500 cursor-default"
                           >
@@ -172,7 +176,9 @@ export default function EquipmentList() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <a
-                      onClick={() => toast.error("Feature not available yet")}
+                      onClick={() =>
+                        toast.error("Fonctionnalité pas encore disponible")
+                      }
                       className="text-yellow-400 hover:text-yellow-500 cursor-default"
                     >
                       Add

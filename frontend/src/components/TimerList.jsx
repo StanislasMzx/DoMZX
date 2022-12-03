@@ -48,31 +48,31 @@ export default function TimerList() {
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Hour
+                    Heure
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Date of the month
+                    Jour du mois
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Month
+                    Mois
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Day of the week
+                    Jour de la semaine
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Command
+                    Appareil
                   </th>
                   <th scope="col" className="relative px-6 py-3">
                     <span className="sr-only"></span>
@@ -131,9 +131,9 @@ export default function TimerList() {
                           toast.promise(
                             deleteCronMutation.mutateAsync(item.cron_id),
                             {
-                              loading: "Loading...",
+                              loading: "Chargement...",
                               error: (err) => err?.response?.data?.msg,
-                              success: "Task deleted",
+                              success: "Tâche supprimée",
                             },
                             {
                               success: { icon: "🕛" },

@@ -33,9 +33,9 @@ export default function Profile({ open, setOpen, user }) {
 
   const onSubmit = (data) => {
     toast.promise(modifyProfileMutate.mutateAsync(data), {
-      loading: "Loading...",
+      loading: "Chargement...",
       error: (err) => err?.response?.data?.msg,
-      success: "Changes have been saved",
+      success: "Modifications enregistrées",
     });
   };
 
@@ -64,7 +64,7 @@ export default function Profile({ open, setOpen, user }) {
                   <div className="px-4 sm:px-6">
                     <div className="flex items-start justify-between">
                       <Dialog.Title className="text-lg font-medium text-gray-900">
-                        Profile settings
+                        Paramètres du profile
                       </Dialog.Title>
                       <div className="ml-3 h-7 flex items-center">
                         <button
@@ -91,7 +91,7 @@ export default function Profile({ open, setOpen, user }) {
                           <div className="mt-1 sm:mt-0 sm:col-span-2">
                             <div className="max-w-lg flex rounded-md shadow-sm">
                               <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
-                                Avatar URL
+                                URL de l'avatar
                               </span>
                               <input
                                 type="text"
@@ -112,7 +112,7 @@ export default function Profile({ open, setOpen, user }) {
                             </div>
                             {errors.imageUrl && (
                               <p className="text-red-500 text-medium italic">
-                                You cannot send an empty form!
+                                Le formulaire n'est pas complet !
                               </p>
                             )}
                           </div>
@@ -125,7 +125,7 @@ export default function Profile({ open, setOpen, user }) {
                             htmlFor="Password"
                             className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                           >
-                            Password
+                            Mot de passe
                           </label>{" "}
                           <div className="mt-1 sm:mt-0 sm:col-span-2">
                             <div className="mb-6">
@@ -133,7 +133,7 @@ export default function Profile({ open, setOpen, user }) {
                                 type="password"
                                 name="oldPassword"
                                 {...register("oldPassword")}
-                                placeholder="Current password"
+                                placeholder="Mot de passe actuel"
                                 className="flex-1 block w-full focus:ring-yellow-300 focus:border-yellow-300 min-w-0 rounded sm:text-sm border-gray-300"
                               />
                             </div>
@@ -146,7 +146,7 @@ export default function Profile({ open, setOpen, user }) {
                                     watch("oldPassword") === "" ||
                                     pwd.length > 7,
                                 })}
-                                placeholder="New password"
+                                placeholder="Nouveau mot de passe"
                                 className={
                                   "flex-1 block w-full min-w-0 rounded sm:text-sm border-gray-300" +
                                   (errors.confirmPassword
@@ -156,7 +156,7 @@ export default function Profile({ open, setOpen, user }) {
                               />
                               {errors.newPassword && (
                                 <p className="text-red-500 text-medium italic">
-                                  Old password empty or password too short!
+                                  Mot de passe actuel trop court !
                                 </p>
                               )}
                             </div>
@@ -178,7 +178,7 @@ export default function Profile({ open, setOpen, user }) {
                               />
                               {errors.confirmPassword && (
                                 <p className="text-red-500 text-medium italic">
-                                  Passwords do not match!
+                                  Les mots de passe sont différents !
                                 </p>
                               )}
                             </div>
@@ -195,13 +195,13 @@ export default function Profile({ open, setOpen, user }) {
                               setOpen(!open);
                             }}
                           >
-                            Cancel
+                            Annuler
                           </button>
                           <button
                             type="submit"
                             className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-yellow-300 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-300"
                           >
-                            Save
+                            Sauvegarder
                           </button>
                         </div>
                       </div>
