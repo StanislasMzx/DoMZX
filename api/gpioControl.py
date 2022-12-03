@@ -1,35 +1,35 @@
 from flask import jsonify
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
 from crontab import CronTab
 import sys
+# from random import choice  # Fake GPIO Class
 
-from random import choice  # Fake GPIO Class
 
-# GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM)
 
 # Fake class to simulate raspberry pi gpios
 
 
-class GPIOClass:
-    GPIOPINS = {"4": 0, "17": 0, "18": 0, "22": 0, "23": 0, "27": 0}
+# class GPIOClass:
+#     GPIOPINS = {"4": 0, "17": 0, "18": 0, "22": 0, "23": 0, "27": 0}
+#
+#     def setup(self, pin, mode):
+#         print(f'GPIO.setup({pin}, {mode})')
+#
+#     def OUT(self):
+#         return "OUT"
+#
+#     def input(self, pin):
+#         return GPIOClass.GPIOPINS[f"{pin}"]
+#
+#     def output(self, pin, state):
+#         GPIOClass.GPIOPINS[f"{pin}"] = state
+#         print(f'GPIO.output({pin}, {state})')
 
-    def setup(self, pin, mode):
-        print(f'GPIO.setup({pin}, {mode})')
 
-    def OUT(self):
-        return "OUT"
-
-    def input(self, pin):
-        return GPIOClass.GPIOPINS[f"{pin}"]
-
-    def output(self, pin, state):
-        GPIOClass.GPIOPINS[f"{pin}"] = state
-        print(f'GPIO.output({pin}, {state})')
-
-
-GPIO = GPIOClass()
+# GPIO = GPIOClass()
 
 
 def equipment_state(equipment_list):
@@ -42,7 +42,7 @@ def equipment_state(equipment_list):
         if e[3]:
             GPIO.setup(e[2], GPIO.OUT)
             equipment_list[i] = {
-                "equipmentId": e[0], "equipmentName": e[1], "pin": e[2], "equipmentState": "on" if GPIO.input(e[2]) else "off"}
+                "equipmentId": e[0], "equipmentName": e[1], "pin": e[2], "equipmentState": "off" if GPIO.input(e[2]) else "on"}
         else:
             if e[4] != None:
                 equipment_list[i] = [{"equipmentId": e[0], "equipmentName": e[1], "pin": e[2], "dual": e[4]}, {
@@ -68,9 +68,9 @@ def trigger_equipment(pin, checkState=False, force=None):
         else:
             GPIO.output(pin, force)
     else:
-        GPIO.output(pin, 1)
-        sleep(1)
         GPIO.output(pin, 0)
+        sleep(1)
+        GPIO.output(pin, 1)
 
 
 def list_crontab():
@@ -79,7 +79,7 @@ def list_crontab():
     """
 
     res = []
-    with CronTab(user=True) as cron:
+    with CronTab(user='www-data') as cron:
         for job in cron:
             e = job.render().split(" ", 5)
             command = e[5].split(" ", 6)
@@ -98,9 +98,9 @@ def create_cron(moment, pin, checkState, force=None):
     Create a new cron that trigger the given pin at the given moment
     """
 
-    with CronTab(user=True) as cron:
+    with CronTab(user='www-data') as cron:
         job = cron.new(
-            command=f'python3 gpioControl.py {pin} {checkState} {force}', comment=f"{datetime.now()}")
+            command=f'python3 /home/pi/DoMZX/api/gpioControl.py {pin} {checkState} {force}', comment=f"{datetime.now()}")
         job.setall(moment)
 
 
@@ -113,9 +113,10 @@ def delete_cron(cronId):
         cron.remove_all(comment=f"{cronId}")
 
 
-if __name__ == "__main__":
-    from api.database import *
+GPIO.cleanup()
 
-    trigger_equipment(sys.argv[1], sys.argv[2], sys.argv[3])
-    update_db('insert into logs(username, equipmentId) values (timer robot, ?)',
-              (sys.argv[1],))
+
+if __name__ == "__main__":
+    trigger_equipment(int(sys.argv[1]), bool(sys.argv[2]), None if sys.argv[3] == "None" else True)
+    #update_db('insert into logs(username, equipmentId) values (timer robot, ?)',
+    #          (sys.argv[1],))
