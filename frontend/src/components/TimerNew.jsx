@@ -42,9 +42,9 @@ export default function TimerNew() {
     toast.promise(
       addCronMutate.mutateAsync(data),
       {
-        loading: "Loading...",
-        error: "An error occurred",
-        success: "New timer added",
+        loading: "Chargement...",
+        error: "Une erreur est survenue",
+        success: "Tâche ajoutée",
       },
       {
         success: { icon: "🕛" },
@@ -74,100 +74,100 @@ export default function TimerNew() {
                 {...register("minute", {
                   required: true,
                 })}
-                placeholder="0-59 or *"
+                placeholder="0-59 ou *"
                 className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
               />
             </div>
             {errors.minute && (
               <p className="text-red-500 text-medium italic">
-                This field is required
+                Ce champ est requis
               </p>
             )}
           </div>
 
           <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5">
             <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-              Hour
+              Heure
             </label>
             <div className="mt-1 sm:mt-0 sm:col-span-2">
               <input
                 type="text"
                 name="hour"
                 {...register("hour", { required: true })}
-                placeholder="0-23 or *"
+                placeholder="0-23 ou *"
                 className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
               />
             </div>
             {errors.hour && (
               <p className="text-red-500 text-medium italic">
-                This field is required
+                Ce champ est requis
               </p>
             )}
           </div>
 
           <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5">
             <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-              Day of the month
+              Jour du mois
             </label>
             <div className="mt-1 sm:mt-0 sm:col-span-2">
               <input
                 type="text"
                 name="day_of_the_month"
                 {...register("day_of_the_month", { required: true })}
-                placeholder="1-31 or *"
+                placeholder="1-31 ou *"
                 className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
               />
             </div>
             {errors.day_of_the_month && (
               <p className="text-red-500 text-medium italic">
-                This field is required
+                Ce champ est requis
               </p>
             )}
           </div>
 
           <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5">
             <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-              Month
+              Mois
             </label>
             <div className="mt-1 sm:mt-0 sm:col-span-2">
               <input
                 type="text"
                 name="month"
                 {...register("month", { required: true })}
-                placeholder="1-12 or *"
+                placeholder="1-12 ou *"
                 className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
               />
             </div>
             {errors.month && (
               <p className="text-red-500 text-medium italic">
-                This field is required
+                Ce champ est requis
               </p>
             )}
           </div>
 
           <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5">
             <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-              Day of the week
+              Jour de la semaine
             </label>
             <div className="mt-1 sm:mt-0 sm:col-span-2">
               <input
                 type="text"
                 name="day_of_the_week"
                 {...register("day_of_the_week", { required: true })}
-                placeholder="0-6 or *"
+                placeholder="0-6 ou *"
                 className="max-w-lg block w-full shadow-sm focus:ring-yellow-300 focus:border-yellow-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
               />
             </div>
             {errors.day_of_the_week && (
               <p className="text-red-500 text-medium italic">
-                This field is required
+                Ce champ est requis
               </p>
             )}
           </div>
 
           <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5">
             <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-              Equipment to trigger
+              Appareil concerné
             </label>
             <div className="mt-1 sm:mt-0 sm:col-span-2">
               <select
@@ -204,7 +204,7 @@ export default function TimerNew() {
             </div>
             {errors.equipment_to_trigger && (
               <p className="text-red-500 text-medium italic">
-                This field is required
+                Ce champ est requis
               </p>
             )}
           </div>
@@ -217,7 +217,7 @@ export default function TimerNew() {
             type="submit"
             className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-yellow-300 hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-300"
           >
-            Add
+            Ajouter
           </button>
         </div>
       </div>

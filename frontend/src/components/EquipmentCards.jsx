@@ -66,9 +66,9 @@ export default function EquipmentCards({ equipment }) {
                       toast.promise(
                         handleTriggerMutate.mutateAsync(item[0]?.equipmentId),
                         {
-                          loading: "Loading...",
-                          error: "An error occurred",
-                          success: "Equipment triggered",
+                          loading: "Chargement...",
+                          error: "Une erreur est survenue",
+                          success: "Séquence déclenchée",
                         },
                         {
                           success: { icon: "🔌" },
@@ -81,7 +81,7 @@ export default function EquipmentCards({ equipment }) {
                       className="w-5 h-5 text-yellow-400 mr-3"
                       aria-hidden="true"
                     />
-                    {item[0]?.equipmentId ? item[0]?.equipmentName : "Trigger"}
+                    {item[0]?.equipmentId ? item[0]?.equipmentName : "Basculer"}
                   </a>
                 </div>
               )}
@@ -92,9 +92,9 @@ export default function EquipmentCards({ equipment }) {
                       ? toast.promise(
                           handleTriggerMutate.mutateAsync(item[1]?.equipmentId),
                           {
-                            loading: "Loading...",
-                            error: "An error occurred",
-                            success: "Equipment triggered",
+                            loading: "Chargement...",
+                            error: "Une erreur est survenue",
+                            success: "Séquence déclenchée",
                           },
                           {
                             success: { icon: "🔌" },
@@ -103,9 +103,9 @@ export default function EquipmentCards({ equipment }) {
                       : toast.promise(
                           handleTriggerMutate.mutateAsync(item?.equipmentId),
                           {
-                            loading: "Loading...",
-                            error: "An error occurred",
-                            success: "Equipment triggered",
+                            loading: "Chargement...",
+                            error: "Une erreur est survenue",
+                            success: "Séquence déclenchée",
                           },
                           {
                             success: { icon: "🔌" },
@@ -118,7 +118,7 @@ export default function EquipmentCards({ equipment }) {
                     className="w-5 h-5 text-yellow-400 mr-3"
                     aria-hidden="true"
                   />
-                  {item[1]?.equipmentId ? item[1]?.equipmentName : "Trigger"}
+                  {item[1]?.equipmentId ? item[1]?.equipmentName : "Basculer"}
                 </a>
               </div>
             </div>
