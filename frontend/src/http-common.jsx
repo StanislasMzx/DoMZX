@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "https://www.domzx.ovh",
   withCredentials: true,
   xsrfCookieName: "csrf_access_token",
   xsrfHeaderName: "X-CSRF-TOKEN",
