@@ -53,11 +53,11 @@ class Login(Resource):
         user = query_db(
             'select * from users where username = ?', (request_username,), one=True)
         if user == None:
-            return {"msg": "Bad username"}, 401
+            return {"msg": "Nom d'utilisateur incorrect"}, 401
 
         password = check_password_hash(user[1], request_password)
         if not (password):
-            return {"msg": "Bad password"}, 401
+            return {"msg": "Mot de passe incorrect"}, 401
 
         access_token = create_access_token(
             identity=request_username)
@@ -118,9 +118,9 @@ class ModifyProfile(Resource):
                         generate_password_hash(request_newPassword), user[0]])
                     changes["password"] = True
                 else:
-                    return {"msg": "Wrong current password"}, 401
+                    return {"msg": "Mot de passe actuel incorrect"}, 401
             else:
-                return {"msg": "Wrong new password(s)"}, 401
+                return {"msg": "Nouveau mot(s) de passe incorrect(s)"}, 401
         return jsonify(changes)
 
 
@@ -130,7 +130,7 @@ class UsersList(Resource):
     def get(self):
         current_user = get_jwt_identity()
         if query_db('select rights from users where username = ?', (current_user,), one=True)[0] != "admin":
-            return {"msg": "You are not admin"}, 403
+            return {"msg": "Vous n'avez pas les droits admin"}, 403
         users = query_db(
             'select * from users')
         for i, e in enumerate(users):
@@ -143,9 +143,6 @@ class EquipmentList(Resource):
     decorators = [jwt_required()]
 
     def get(self):
-        current_user = get_jwt_identity()
-        if query_db('select rights from users where username = ?', (current_user,), one=True)[0] != "admin":
-            return {"msg": "You are not admin"}, 403
         equipment = query_db('select * from wiring')
         return equipment_state(equipment)
 
@@ -197,7 +194,7 @@ class TimerNew(Resource):
     def post(self):
         current_user = get_jwt_identity()
         if query_db('select rights from users where username = ?', (current_user,), one=True)[0] != "admin":
-            return {"msg": "You are not admin"}, 403
+            return {"msg": "Vous n'avez pas les droits admin"}, 403
 
         parser = reqparse.RequestParser()
         parser.add_argument('minute')
@@ -238,7 +235,7 @@ class TimerDelete(Resource):
     def post(self):
         current_user = get_jwt_identity()
         if query_db('select rights from users where username = ?', (current_user,), one=True)[0] != "admin":
-            return {"msg": "You are not admin"}, 403
+            return {"msg": "Vous n'avez pas les droits admin"}, 403
 
         parser = reqparse.RequestParser()
         parser.add_argument("cronId", type=str)
@@ -249,4 +246,4 @@ class TimerDelete(Resource):
 
         delete_cron(request_cronId)
 
-        return jsonify({"msg": "Cron deleted"})
+        return jsonify({"msg": "Tâche supprimée"})

@@ -19,7 +19,7 @@ export default function Users() {
   if (isLoading) {
     return (
       <div className="hidden">
-        {toast.loading("Loading...", { id: "usersListLoading" })}
+        {toast.loading("Chargement...", { id: "usersListLoading" })}
       </div>
     );
   }
@@ -44,25 +44,25 @@ export default function Users() {
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Username
+                    Utilisateur
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Password
+                    Mot de passe
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Rights
+                    Droits
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Expiration
+                    Date d'expiration
                   </th>
                   <th scope="col" className="relative px-6 py-3">
                     <span className="sr-only">Edit</span>
@@ -112,10 +112,12 @@ export default function Users() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <a
-                        onClick={() => toast.error("Feature not available yet")}
+                        onClick={() =>
+                          toast.error("Fonctionnalité pas encore disponible")
+                        }
                         className="text-yellow-400 hover:text-yellow-500 cursor-default"
                       >
-                        Edit
+                        Modifier
                       </a>
                     </td>
                   </tr>
@@ -145,10 +147,12 @@ export default function Users() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <a
-                      onClick={() => toast.error("Feature not available yet")}
+                      onClick={() =>
+                        toast.error("Fonctionnalité pas encore disponible")
+                      }
                       className="text-yellow-400 hover:text-yellow-500 cursor-default"
                     >
-                      Add
+                      Ajouter
                     </a>
                   </td>
                 </tr>
