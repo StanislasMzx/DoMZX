@@ -168,7 +168,7 @@ export default function Profile({ open, setOpen, user }) {
                                   validate: (pwd) =>
                                     pwd === watch("newPassword"),
                                 })}
-                                placeholder="Confirm password"
+                                placeholder="Confirmer le mot de passe"
                                 className={
                                   "flex-1 block w-full min-w-0 rounded sm:text-sm border-gray-300" +
                                   (errors.confirmPassword
