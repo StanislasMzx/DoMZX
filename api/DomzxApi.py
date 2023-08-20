@@ -143,7 +143,7 @@ class LogsList(Resource):
 
     def get(self):
         logs = query_db(
-            'select logs.username, logs.date, wiring.equipmentName from logs join wiring on wiring.equipmentId = logs.equipmentId')
+            'select logs.username, logs.date, wiring.equipmentName from logs join wiring on wiring.equipmentId = logs.equipmentId order by logs.date desc')
         for i, e in enumerate(logs):
             logs[i] = {"username": e[0], "date": e[1], "equipmentName": e[2]}
         return jsonify(logs)
