@@ -59,7 +59,6 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -177,20 +176,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-- Yann DIONISIO <<yann.dionisio@telecomnancy.eu>>
-- Adrien LAROUSSE <<adrien.larousse@telecomnancy.eu>>
-- Mathis MANGOLD <<mathis.mangold@telecomnancy.eu>>
 - Stanislas MEZUREUX <<stanislas.mezureux@telecomnancy.eu>>
 
 Project Link: [https://github.com/StanislasMzx/DoMZX](https://github.com/StanislasMzx/DoMZX)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- ACKNOWLEDGMENTS -->
-
-## Acknowledgments
-
-- [QuickChart GraphViz API](https://quickchart.io/documentation/graphviz-api/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
