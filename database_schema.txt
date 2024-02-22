@@ -1,4 +1,27 @@
-CREATE TABLE Users (username VARCHAR PRIMARY KEY, password VARCHAR NOT NULL, rights VARCHAR CHECK(rights IN ('admin', 'perm', 'temp')) NOT NULL, expiration DATE, imageUrl VARCHAR NOT NULL);
-CREATE TABLE sqlite_sequence(name,seq);
-CREATE TABLE Wiring (equipmentId integer primary key autoincrement, equipmentName varchar not null, pin integer not null, checkState bool not null, dualId integer);
-CREATE TABLE Logs (username varchar references users not null, date date default (datetime(current_timestamp, 'localtime')) not null, equipmentId integer references wiring not null, primary key (username, date));
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Wiring;
+DROP TABLE IF EXISTS Logs;
+
+
+CREATE TABLE Users (
+    username VARCHAR PRIMARY KEY, 
+    password VARCHAR NOT NULL, 
+    rights VARCHAR CHECK(rights IN ('admin', 'perm', 'temp')) NOT NULL, 
+    expiration DATE, 
+    imageUrl VARCHAR NOT NULL
+);
+
+CREATE TABLE Wiring (
+    equipmentId integer primary key autoincrement, 
+    equipmentName varchar not null, 
+    pin integer not null, 
+    checkState bool not null, 
+    dualId integer
+);
+
+CREATE TABLE Logs (
+    username varchar references users not null, 
+    date date default (datetime(current_timestamp, 'localtime')) not null, 
+    equipmentId integer references wiring not null, 
+    primary key (username, date)
+);
